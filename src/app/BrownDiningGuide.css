@@ -1,0 +1,298 @@
+/* BrownDiningGuide.css */
+:root {
+    --primary-bg: #f5f0e8;
+    --dark-brown: #3a2f23;
+    --light-brown: #8c7b6b;
+    --button-bg: #2d2a25;
+    --text-color: #333;
+    --white: #fff;
+    --highlight: #b5651d;
+  }
+  
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Georgia', serif;
+  }
+  
+  body {
+    background-color: var(--primary-bg);
+    color: var(--text-color);
+  }
+  
+  .dining-guide {
+    width: 100%;
+    overflow-x: hidden;
+  }
+  
+  /* Hero Section */
+  .hero-section {
+    position: relative;
+    width: 100%;
+    height: 600px;
+    overflow: hidden;
+    margin-bottom: 60px;
+  }
+  
+  .hero-image {
+    width: 100%;
+    height: 100%;
+    background-image: url('/api/placeholder/1200/600');
+    background-size: cover;
+    background-position: center;
+    position: relative;
+  }
+  
+  .hero-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    background: rgba(0, 0, 0, 0.2);
+  }
+  
+  .hero-title {
+    color: var(--white);
+    font-size: 64px;
+    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5);
+    padding: 0 20px;
+    max-width: 800px;
+  }
+  
+  /* Recommendations Section */
+  .recommendations-section {
+    padding: 40px 0 80px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  .section-title {
+    text-align: center;
+    font-size: 36px;
+    color: var(--dark-brown);
+    margin-bottom: 50px;
+    font-weight: normal;
+    position: relative;
+  }
+  
+  .section-title::after {
+    content: '';
+    position: absolute;
+    bottom: -15px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 3px;
+    background-color: var(--highlight);
+  }
+  
+  .food-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 30px;
+    padding: 0 20px;
+  }
+  
+  .food-item {
+    overflow: hidden;
+    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+  }
+  
+  .food-item:hover {
+    transform: translateY(-10px);
+  }
+  
+  .food-item img {
+    width: 100%;
+    height: 240px;
+    object-fit: cover;
+  }
+  
+  .food-caption {
+    padding: 15px;
+    background-color: var(--white);
+  }
+  
+  .food-caption h3 {
+    font-size: 18px;
+    margin-bottom: 5px;
+    color: var(--dark-brown);
+  }
+  
+  .food-caption p {
+    font-size: 14px;
+    color: var(--light-brown);
+  }
+  
+  /* Campus Dining Info Section */
+  .campus-dining-info {
+    background-color: var(--dark-brown);
+    padding: 80px 0;
+    color: var(--white);
+  }
+  
+  .info-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 40px;
+    padding: 0 20px;
+  }
+  
+  .info-text {
+    flex: 1;
+  }
+  
+  .info-text h2 {
+    font-size: 32px;
+    margin-bottom: 20px;
+  }
+  
+  .info-text p {
+    font-size: 16px;
+    line-height: 1.6;
+    margin-bottom: 30px;
+  }
+  
+  .learn-more-btn {
+    background-color: var(--highlight);
+    color: var(--white);
+    padding: 12px 24px;
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: 500;
+    display: inline-block;
+    transition: background-color 0.3s ease;
+  }
+  
+  .learn-more-btn:hover {
+    background-color: #c67a34;
+  }
+  
+  .info-image {
+    flex: 1;
+  }
+  
+  .info-image img {
+    width: 100%;
+    border-radius: 8px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+  }
+  
+  /* Footer */
+  .footer {
+    background-color: var(--primary-bg);
+  }
+  
+  .footer-top {
+    padding: 50px 0;
+    text-align: center;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  }
+  
+  .social-button-container {
+    display: flex;
+    justify-content: center;
+  }
+  
+  .social-button {
+    background-color: var(--button-bg);
+    color: var(--white);
+    border: none;
+    border-radius: 50px;
+    padding: 15px 40px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  
+  .social-button:hover {
+    background-color: var(--highlight);
+  }
+  
+  .footer-bottom {
+    padding: 30px 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .footer-bottom p {
+    color: var(--light-brown);
+  }
+  
+  .footer-links {
+    display: flex;
+    gap: 20px;
+  }
+  
+  .footer-links a {
+    color: var(--light-brown);
+    text-decoration: none;
+    transition: color 0.3s ease;
+  }
+  
+  .footer-links a:hover {
+    color: var(--dark-brown);
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 992px) {
+    .food-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .hero-title {
+      font-size: 48px;
+    }
+    
+    .info-container {
+      flex-direction: column;
+    }
+    
+    .info-text, .info-image {
+      width: 100%;
+    }
+  }
+  
+  @media (max-width: 768px) {  
+    .hero-section {
+      height: 400px;
+    }
+    
+    .hero-title {
+      font-size: 36px;
+    }
+    
+    .section-title {
+      font-size: 28px;
+    }
+    
+    .footer-bottom {
+      flex-direction: column;
+      gap: 20px;
+      text-align: center;
+    }
+  }
+  
+  @media (max-width: 576px) {
+    .food-grid {
+      grid-template-columns: 1fr;
+    }
+    
+    .hero-title {
+      font-size: 32px;
+    }
+  }

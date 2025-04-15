@@ -1,103 +1,85 @@
-import Image from "next/image";
+'use client'
+import React from 'react';
+import './BrownDiningGuide.css';
+import NavigationBar from './components/NavigationBar/NavigationBar';
 
-export default function Home() {
+const BrownDiningGuide: React.FC = () => {
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+    <div className="dining-guide">
+      <NavigationBar />
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+      <section className="hero-section">
+        <div className="hero-image">
+          <div className="hero-overlay">
+            <h2 className="hero-title">Making Dining Easier for You!</h2>
+          </div>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
+      </section>
+
+      <section className="recommendations-section">
+        <h2 className="section-title">Our Dining Recommendations for April 2025</h2>
+        <div className="food-grid">
+          <div className="food-item">
+            <img src="/api/placeholder/400/400" alt="Yellow tomatoes stacked in a pyramid" />
+            <div className="food-caption">
+              <h3>Seasonal Tomatoes</h3>
+              <p>Ratty Dining Hall</p>
+            </div>
+          </div>
+          <div className="food-item">
+            <img src="/api/placeholder/400/400" alt="White cheese blocks stacked" />
+            <div className="food-caption">
+              <h3>Artisan Cheese</h3>
+              <p>Andrews Commons</p>
+            </div>
+          </div>
+          <div className="food-item">
+            <img src="/api/placeholder/400/400" alt="Sliced artisan bread loaf" />
+            <div className="food-caption">
+              <h3>Fresh Bakery</h3>
+              <p>Blue Room</p>
+            </div>
+          </div>
+          <div className="food-item">
+            <img src="/api/placeholder/400/400" alt="Red cherry tomatoes" />
+            <div className="food-caption">
+              <h3>Cherry Tomatoes</h3>
+              <p>Verney-Woolley</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="campus-dining-info">
+        <div className="info-container">
+          <div className="info-text">
+            <h2>Brown University Dining Services</h2>
+            <p>Explore dining options across campus, from our main dining halls to cafés and late-night eateries. Brown Dining Services is committed to providing delicious, nutritious, and sustainable food options for our community.</p>
+            <a href="/dining-halls" className="learn-more-btn">LEARN MORE</a>
+          </div>
+          <div className="info-image">
+            <img src="/api/placeholder/500/300" alt="Brown University dining hall" />
+          </div>
+        </div>
+      </section>
+
+      <footer className="footer">
+        <div className="footer-top">
+          <div className="social-button-container">
+            <button className="social-button">SOCIAL</button>
+          </div>
+        </div>
+        <div className="footer-bottom">
+          <p>© 2025 Brown University Dining Services</p>
+          <div className="footer-links">
+            <a href="/privacy">Privacy Policy</a>
+            <a href="/terms">Terms of Use</a>
+            <a href="/accessibility">Accessibility</a>
+          </div>
+        </div>
       </footer>
     </div>
   );
-}
+};
+
+export default BrownDiningGuide;
