@@ -10,36 +10,54 @@ jobs:
     runs-on: self-hosted
 
     steps:
+      # Step 1: Checkout the repo
       - name: Checkout code
         uses: actions/checkout@v4
 
+      # Step 2: Setup Node.js
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
 
+      # Step 3: Install dependencies
       - name: Install dependencies
         run: npm install
+        shell: powershell
 
+      # Step 4: Build React app
       - name: Build React app
         run: |
+          Write-Output "Building project..."
           npm run build
-        shell: pwsh
+          if ($LASTEXITCODE -ne 0) {
+              Write-Error "Build failed. Exiting."
+              exit 1
+          }
+        shell: powershell
 
+      # Step 5: Deploy build to local website folder
       - name: Deploy build to web root
         run: |
           $projectDir = "${{ github.workspace }}"
           $websiteDir = "D:\Github\testNitin\website"
           $buildDir = Join-Path $projectDir "build"
 
+          # Check if build folder exists
           if (!(Test-Path $buildDir)) {
-              Write-Error "Build folder does not exist: $buildDir. Exiting."
+              Write-Error "Build folder does not exist: $buildDir. Did the build succeed?"
               exit 1
           }
 
+          # Create website folder if missing
           if (!(Test-Path $websiteDir)) {
               New-Item -ItemType Directory -Path $websiteDir
           }
 
+          # Optional: Clean website folder before copy
+          Get-ChildItem -Path $websiteDir -Recurse | Remove-Item -Force -Recurse
+
+          # Copy build files to website folder
           Copy-Item -Path "$buildDir\*" -Destination $websiteDir -Recurse -Force
-        shell: pwsh
+          Write-Output "Deployment complete!"
+        shell: powershell
