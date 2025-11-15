@@ -1,0 +1,32 @@
+name: Build and Deploy to Local Server
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build React app
+        run: npm run build
+
+      - name: Deploy build to web root
+        run: |
+          if (!(Test-Path "D:\Github\test\website")) {
+            mkdir D:\Github\test\website
+          }
+          Copy-Item -Path build\* -Destination "D:\Github\test\website" -Recurse -Force
