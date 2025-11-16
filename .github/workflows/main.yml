@@ -1,0 +1,45 @@
+name: Build Next.js SSR App
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-start:
+    runs-on: self-hosted
+
+    steps:
+      # Step 1: Checkout the repo
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # Step 2: Setup Node.js
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      # Step 3: Install dependencies
+      - name: Install dependencies
+        run: npm install
+        shell: powershell
+
+      # Step 4: Build Next.js app
+      - name: Build Next.js app
+        run: |
+          Write-Output "Building Next.js project..."
+          npm run build
+          if ($LASTEXITCODE -ne 0) { 
+              Write-Error "Build failed. Exiting."
+              exit 1
+          }
+        shell: powershell
+
+      # Step 5: Start the app in the background (SSR)
+      - name: Start Next.js server
+        run: |
+          Write-Output "Starting Next.js server..."
+          Start-Process -NoNewWindow -FilePath "npm" -ArgumentList "run start" -WorkingDirectory "${{ github.workspace }}"
+          Write-Output "Next.js server started on self-hosted runner."
+        shell: powershell
