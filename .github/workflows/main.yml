@@ -1,4 +1,4 @@
-name: Build Next.js SSR App
+name: Build and Deploy Next.js
 
 on:
   push:
@@ -6,11 +6,11 @@ on:
       - main
 
 jobs:
-  build-and-start:
+  deploy:
     runs-on: self-hosted
 
     steps:
-      # Step 1: Checkout the repo
+      # Step 1: Checkout code
       - name: Checkout code
         uses: actions/checkout@v4
 
@@ -25,21 +25,66 @@ jobs:
         run: npm install
         shell: powershell
 
-      # Step 4: Build Next.js app
-      - name: Build Next.js app
+      # Step 4: Detect if app is static
+      - name: Check for static export
+        id: check_static
         run: |
-          Write-Output "Building Next.js project..."
-          npm run build
-          if ($LASTEXITCODE -ne 0) { 
-              Write-Error "Build failed. Exiting."
-              exit 1
+          $pagesDir = Join-Path "${{ github.workspace }}" "pages"
+          $usesSSR = Get-ChildItem $pagesDir -Recurse | Select-String "getServerSideProps|API"
+          if ($usesSSR) {
+              Write-Output "App uses SSR or API routes"
+              echo "static=false" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8
+          } else {
+              Write-Output "App is fully static"
+              echo "static=true" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8
           }
         shell: powershell
 
-      # Step 5: Start the app in the background (SSR)
-      - name: Start Next.js server
+      # Step 5: Build Next.js
+      - name: Build Next.js app
+        run: npm run build
+        shell: powershell
+
+      # Step 6A: Deploy if static
+      - name: Deploy static site
+        if: steps.check_static.outputs.static == 'true'
         run: |
-          Write-Output "Starting Next.js server..."
-          Start-Process -NoNewWindow -FilePath "npm" -ArgumentList "run start" -WorkingDirectory "${{ github.workspace }}"
-          Write-Output "Next.js server started on self-hosted runner."
+          npm run export
+          $exportDir = Join-Path "${{ github.workspace }}" "out"
+          $websiteDir = "D:\Github\test\website"
+
+          if (!(Test-Path $websiteDir)) {
+              New-Item -ItemType Directory -Path $websiteDir
+          }
+
+          # Clean old files
+          Get-ChildItem -Path $websiteDir -Recurse | Remove-Item -Force -Recurse
+
+          # Copy static files
+          Copy-Item -Path "$exportDir\*" -Destination $websiteDir -Recurse -Force
+          Write-Output "Static site deployed!"
+        shell: powershell
+
+      # Step 6B: Start SSR server
+      - name: Start SSR server
+        if: steps.check_static.outputs.static == 'false'
+        run: |
+          $serviceName = "NextJSServer"
+          $nodePath = "C:\Users\JanaD\AppData\Roaming\npm\node.exe"
+          $nextStart = Join-Path "${{ github.workspace }}" "node_modules\next\dist\bin\next"
+          
+          # Stop existing service
+          if (Get-Service $serviceName -ErrorAction SilentlyContinue) {
+              Stop-Service $serviceName -Force
+          }
+
+          # Install service if it doesn't exist
+          if (-not (Get-Service $serviceName -ErrorAction SilentlyContinue)) {
+              Write-Output "Installing NSSM service..."
+              & nssm install $serviceName $nodePath "$nextStart start" "${{ github.workspace }}"
+          }
+
+          # Start the service
+          Start-Service $serviceName
+          Write-Output "Next.js SSR server running as service."
         shell: powershell
