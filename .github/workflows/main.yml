@@ -1,4 +1,4 @@
-name: Build and Deploy to Local Server
+name: Build and Deploy Next.js to Local Server
 
 on:
   push:
@@ -10,54 +10,48 @@ jobs:
     runs-on: self-hosted
 
     steps:
-      # Step 1: Checkout the repo
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # Step 2: Setup Node.js
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
 
-      # Step 3: Install dependencies
       - name: Install dependencies
         run: npm install
         shell: powershell
 
-      # Step 4: Build React app
-      - name: Build React app
+      - name: Build and Export Next.js app
         run: |
-          Write-Output "Building project..."
+          Write-Output "Building Next.js project..."
           npm run build
-          if ($LASTEXITCODE -ne 0) {
-              Write-Error "Build failed. Exiting."
-              exit 1
-          }
+          if ($LASTEXITCODE -ne 0) { exit 1 }
+
+          Write-Output "Exporting static site..."
+          npm run export
+          if ($LASTEXITCODE -ne 0) { exit 1 }
         shell: powershell
 
-      # Step 5: Deploy build to local website folder
-      - name: Deploy build to web root
+      - name: Deploy exported site to web root
         run: |
           $projectDir = "${{ github.workspace }}"
           $websiteDir = "D:\Github\testNitin\website"
-          $buildDir = Join-Path $projectDir "build"
+          $exportDir = Join-Path $projectDir "out"
 
-          # Check if build folder exists
-          if (!(Test-Path $buildDir)) {
-              Write-Error "Build folder does not exist: $buildDir. Did the build succeed?"
+          if (!(Test-Path $exportDir)) {
+              Write-Error "Export folder does not exist: $exportDir. Did 'next export' succeed?"
               exit 1
           }
 
-          # Create website folder if missing
           if (!(Test-Path $websiteDir)) {
               New-Item -ItemType Directory -Path $websiteDir
           }
 
-          # Optional: Clean website folder before copy
+          # Optional: clean website folder before copying
           Get-ChildItem -Path $websiteDir -Recurse | Remove-Item -Force -Recurse
 
-          # Copy build files to website folder
-          Copy-Item -Path "$buildDir\*" -Destination $websiteDir -Recurse -Force
+          # Copy exported site
+          Copy-Item -Path "$exportDir\*" -Destination $websiteDir -Recurse -Force
           Write-Output "Deployment complete!"
         shell: powershell
