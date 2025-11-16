@@ -1,4 +1,4 @@
-name: Build and Deploy Next.js to Local Server
+name: Build Next.js SSR App
 
 on:
   push:
@@ -6,52 +6,40 @@ on:
       - main
 
 jobs:
-  deploy:
+  build-and-start:
     runs-on: self-hosted
 
     steps:
+      # Step 1: Checkout the repo
       - name: Checkout code
         uses: actions/checkout@v4
 
+      # Step 2: Setup Node.js
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
 
+      # Step 3: Install dependencies
       - name: Install dependencies
         run: npm install
         shell: powershell
 
-      - name: Build and Export Next.js app
+      # Step 4: Build Next.js app
+      - name: Build Next.js app
         run: |
           Write-Output "Building Next.js project..."
           npm run build
-          if ($LASTEXITCODE -ne 0) { exit 1 }
-
-          Write-Output "Exporting static site..."
-          npm run export
-          if ($LASTEXITCODE -ne 0) { exit 1 }
-        shell: powershell
-
-      - name: Deploy exported site to web root
-        run: |
-          $projectDir = "${{ github.workspace }}"
-          $websiteDir = "D:\Github\testNitin\website"
-          $exportDir = Join-Path $projectDir "out"
-
-          if (!(Test-Path $exportDir)) {
-              Write-Error "Export folder does not exist: $exportDir. Did 'next export' succeed?"
+          if ($LASTEXITCODE -ne 0) { 
+              Write-Error "Build failed. Exiting."
               exit 1
           }
+        shell: powershell
 
-          if (!(Test-Path $websiteDir)) {
-              New-Item -ItemType Directory -Path $websiteDir
-          }
-
-          # Optional: clean website folder before copying
-          Get-ChildItem -Path $websiteDir -Recurse | Remove-Item -Force -Recurse
-
-          # Copy exported site
-          Copy-Item -Path "$exportDir\*" -Destination $websiteDir -Recurse -Force
-          Write-Output "Deployment complete!"
+      # Step 5: Start the app in the background (SSR)
+      - name: Start Next.js server
+        run: |
+          Write-Output "Starting Next.js server..."
+          Start-Process -NoNewWindow -FilePath "npm" -ArgumentList "run start" -WorkingDirectory "${{ github.workspace }}"
+          Write-Output "Next.js server started on self-hosted runner."
         shell: powershell
